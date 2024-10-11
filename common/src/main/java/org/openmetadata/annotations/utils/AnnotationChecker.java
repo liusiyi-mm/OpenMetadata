@@ -1,3 +1,5 @@
+
+/**用于检查某个类及其字段上是否存在指定的注解 */
 package org.openmetadata.annotations.utils;
 
 import java.lang.annotation.Annotation;
