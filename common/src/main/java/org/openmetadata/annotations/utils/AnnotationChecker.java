@@ -1,5 +1,7 @@
-
-/**用于检查某个类及其字段上是否存在指定的注解 */
+/**
+用于检查某个类及其字段上是否存在指定的注解 
+通过反射机制遍历类的字段，查看是否有被某个注解标记的字段
+*/
 package org.openmetadata.annotations.utils;
 
 import java.lang.annotation.Annotation;
