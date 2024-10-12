@@ -10,6 +10,9 @@
 #  limitations under the License.
 """
 Entrypoint to run an automation workflow
+
+这段 Python 代码是用于执行 OpenMetadata 系统中的自动化工作流（Automation Workflow）的入口点。
+主要用于从环境变量中获取 YAML 格式的工作流配置，解析配置并执行相应的自动化任务。
 """
 import logging
 import os
