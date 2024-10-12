@@ -10,6 +10,7 @@
 #  limitations under the License.
 """
 Entrypoint to send exit handler information when a pipeline fails
+这段 Python 代码的目的是作为 Airflow 工作流失败时的退出处理器（exit handler）回调，用来向元数据服务发送工作流失败信息。
 """
 import logging
 import os
