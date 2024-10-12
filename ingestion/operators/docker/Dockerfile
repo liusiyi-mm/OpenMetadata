@@ -1,3 +1,8 @@
+***
+这段代码是一个 Dockerfile，用于创建一个基于 Python 3.10 的 Docker 镜像，
+主要目的是为了在容器中安装并运行 OpenMetadata 的数据摄取（ingestion）流程，
+特别是结合 Airflow 的 DockerOperator 来执行工作流
+***
 FROM python:3.10-bullseye
 
 RUN curl -sS https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
