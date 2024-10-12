@@ -11,6 +11,10 @@
  *  limitations under the License.
  */
 
+/**
+这段代码属于一个名为 CommonUtil 的工具类，它提供了一系列常用的实用方法，便于在整个项目中复用。
+*/
+
 package org.openmetadata.common.utils;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -57,7 +61,10 @@ public final class CommonUtil {
 
   private CommonUtil() {}
 
-  /** Get resources from jar file or directories in the class path matching pattern */
+  /** 
+  Get resources from jar file or directories in the class path matching pattern 
+  从 JAR 文件或类路径中的目录中获取与给定模式匹配的资源
+  */
   public static List<String> getResources(Pattern pattern) throws IOException {
     ArrayList<String> resources = new ArrayList<>();
     String classPath = System.getProperty("java.class.path", ".");
@@ -76,7 +83,10 @@ public final class CommonUtil {
     return resources;
   }
 
-  /** Check if any given object falls under OM, or Collate packages */
+  /** 
+  Check if any given object falls under OM, or Collate packages 
+  该方法检查传入的对象 obj 是否属于 OpenMetadata 或 Collate 包
+  */
   public static Boolean isOpenMetadataObject(Object obj) {
     return obj != null
         && JAR_NAME_FILTER.stream()
