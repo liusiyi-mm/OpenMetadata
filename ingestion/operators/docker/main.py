@@ -10,7 +10,8 @@
 #  limitations under the License.
 """
 Main ingestion entrypoint to run OM workflows
-
+代码是 OpenMetadata 系统的主要数据摄取（ingestion）入口点，用于执行不同类型的工作流。
+它的设计目的是在不同的环境中（例如 Airflow 的 KubernetesPodOperator）运行摄取任务
 """
 import os
 
@@ -26,6 +27,10 @@ from metadata.workflow.metadata import MetadataWorkflow
 from metadata.workflow.profiler import ProfilerWorkflow
 from metadata.workflow.usage import UsageWorkflow
 
+"""
+定义了 WORKFLOW_MAP，这是一个字典，键是 PipelineType 的值，值是对应的工作流类。
+这些工作流类用于处理不同的摄取任务，例如元数据摄取、使用情况数据摄取、数据血缘追踪、数据质量测试等。
+"""
 WORKFLOW_MAP = {
     PipelineType.metadata.value: MetadataWorkflow,
     PipelineType.usage.value: UsageWorkflow,
@@ -76,7 +81,7 @@ def main():
 
     We will also set the `pipelineRunId` value if it comes from the environment.
     """
-
+    # 获取环境变量
     # DockerOperator expects an env var called config
     config = os.getenv("config")
     if not config:
@@ -84,6 +89,7 @@ def main():
             "Missing environment variable `config`. This is needed to configure the Workflow."
         )
 
+    # 获取工作流类
     pipeline_type = os.getenv("pipelineType")
     if not pipeline_type:
         raise RuntimeError(
@@ -92,6 +98,7 @@ def main():
 
     pipeline_run_id = os.getenv("pipelineRunId")
 
+    # 加载工作流配置
     workflow_class = WORKFLOW_MAP.get(pipeline_type)
     if workflow_class is None:
         raise ValueError(f"Missing workflow_class loaded from {pipeline_type}")
@@ -101,9 +108,18 @@ def main():
     if pipeline_run_id:
         workflow_config["pipelineRunId"] = pipeline_run_id
 
+    # 设置日志级别
     logger_level = workflow_config.get("workflowConfig", {}).get("loggerLevel")
     set_loggers_level(logger_level or LogLevels.INFO.value)
 
+    # 创建并执行工作流
+    """
+    使用 workflow_class.create(workflow_config) 来创建对应的工作流实例。
+    调用 workflow.execute() 方法执行工作流。
+    调用 workflow.raise_from_status() 检查工作流的执行状态，如果失败会抛出异常。
+    调用 workflow.print_status() 输出工作流的状态。
+    调用 workflow.stop() 停止工作流，进行清理操作。
+    """
     workflow = workflow_class.create(workflow_config)
     workflow.execute()
     workflow.raise_from_status()
