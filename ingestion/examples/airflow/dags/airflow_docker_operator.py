@@ -10,6 +10,9 @@
 #  limitations under the License.
 """
 You can run this DAG from the default OM installation
+这段代码定义了一个 Airflow DAG，
+用于在 Docker 容器中运行 OpenMetadata 的元数据提取任务（metadata ingestion），
+并利用 DockerOperator 来执行任务
 """
 from datetime import datetime
 
@@ -47,15 +50,16 @@ workflowConfig:
       jwtToken: "eyJraWQiOiJHYjM4OWEtOWY3Ni1nZGpzLWE5MmotMDI0MmJrOTQzNTYiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlzQm90IjpmYWxzZSwiaXNzIjoib3Blbi1tZXRhZGF0YS5vcmciLCJpYXQiOjE2NjM5Mzg0NjIsImVtYWlsIjoiYWRtaW5Ab3Blbm1ldGFkYXRhLm9yZyJ9.tS8um_5DKu7HgzGBzS1VTA5uUjKWOCU0B_j08WXBiEC0mr0zNREkqVfwFDD-d24HlNEbrqioLsBuFRiwIWKc1m_ZlVQbG7P36RUxhuv2vbSp80FKyNM-Tj93FDzq91jsyNmsQhyNv_fNr3TXfzzSPjHt8Go0FMMP66weoKMgW2PbXlhVKwEuXUHyakLLzewm9UMeQaEiRzhiTMU3UkLXcKbYEJJvfNFcLwSl9W8JCO_l0Yj3ud-qt_nQYEZwqW6u5nfdQllN133iikV4fM5QZsMCnm8Rq1mvLR0y9bmJiD7fwM1tmJ791TUWqmKaTnP49U493VanKpUAfzIiOiIbhg"
 """
 
-
+# Airflow DAG 定义
 with models.DAG(
     "ingestion-docker-operator",
     schedule_interval="@once",
     start_date=datetime(2021, 1, 1),
     catchup=False,
     tags=["OpenMetadata"],
-) as dag:
-    DockerOperator(
+) as dag:   
+    # DockerOperator 定义，使用了 DockerOperator 来运行一个 Docker 容器，执行 OpenMetadata 的工作流
+    DockerOperator(   
         command="python main.py",
         image="openmetadata/ingestion-base:local",
         environment={"config": config, "pipelineType": PipelineType.metadata.value},
