@@ -75,7 +75,7 @@ if res.status_code == 404:  # not found
 elif res.status_code != 200:
     raise RuntimeError(f"Could not fetch {DEFAULT_OM_AIRFLOW_CONNECTION} connection")
 
-
+# 定义 DAG
 with DAG(
     "lineage_tutorial_operator",
     default_args=default_args,
@@ -86,6 +86,7 @@ with DAG(
     catchup=False,
     tags=["example"],
 ) as dag:
+    # BashOperator 任务    
     # t1, t2 and t3 are examples of tasks created by instantiating operators
     t1 = BashOperator(
         task_id="print_date",
@@ -116,6 +117,7 @@ with DAG(
     dag.doc_md = """
     This is a documentation placed anywhere
     """  # otherwise, type it like this
+    # 模板化 BashOperator
     templated_command = dedent(
         """
     {% for i in range(5) %}
@@ -133,8 +135,9 @@ with DAG(
         params={"my_param": "Parameter I passed in"},
     )
 
-    t1 >> [t2, t3]
+    t1 >> [t2, t3]  # t1 执行完后，t2 和 t3 同时并行执行。
 
+    # 用于记录数据溯源信息，并将其上传到 OpenMetadata 服务器。
     t4 = OpenMetadataLineageOperator(
         task_id="lineage_op",
         depends_on_past=False,
@@ -143,4 +146,4 @@ with DAG(
         only_keep_dag_lineage=True,
     )
 
-    [t1, t2, t3] >> t4
+    [t1, t2, t3] >> t4   # t4 依赖于 t1、t2 和 t3，表示 t1、t2 和 t3 完成后，t4 才会执行。
