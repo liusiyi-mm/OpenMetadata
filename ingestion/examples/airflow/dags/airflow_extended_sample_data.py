@@ -9,6 +9,15 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+
+"""
+这段代码的 DAG 名为 "extended_sample_data"，表示它处理的是一个扩展样本数据的摄取工作流。
+通过 PythonOperator 直接在 Airflow 中执行 Python 函数，适用于简单的、本地的执行环境。
+
+上一段代码的 DAG 名为 "ingestion-docker-operator"，表明它通过 DockerOperator 来调度和运行数据摄取任务。
+使用 DockerOperator 通过容器化的方式运行摄取任务，更适合在 Docker 或 Kubernetes 等容器化平台上使用。
+"""
+
 from datetime import timedelta
 
 import yaml
