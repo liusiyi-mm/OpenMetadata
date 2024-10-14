@@ -61,7 +61,7 @@ with models.DAG(
     # DockerOperator 定义，使用了 DockerOperator 来运行一个 Docker 容器，执行 OpenMetadata 的工作流
     DockerOperator(   
         command="python main.py",
-        image="openmetadata/ingestion-base:local",
+        image="openmetadata/ingestion-base:local",  # 指定 Docker 镜像为 openmetadata/ingestion-base:local，这是运行 OpenMetadata Ingestion 任务所需的基础镜像。
         environment={"config": config, "pipelineType": PipelineType.metadata.value},
         docker_url="unix://var/run/docker.sock",  # To allow to start Docker. Needs chmod 666 permissions
         tty=True,
