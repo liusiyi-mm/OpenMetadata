@@ -13,6 +13,10 @@ You can run this DAG from the default OM installation.
 
 For this DAG to run properly we expected an OpenMetadata
 Airflow connection named `openmetadata_conn_id`.
+
+这段代码实现了一个名为 lineage_tutorial_operator 的 Airflow DAG (Directed Acyclic Graph)，
+展示了如何在 Airflow 中使用 Bash 任务、模板化命令，以及如何集成 OpenMetadata 溯源操作。
+它演示了如何通过 Airflow 任务生成时间信息、使用任务重试策略、并且通过 OpenMetadataLineageOperator 来记录数据流和溯源信息。
 """
 from datetime import datetime
 from textwrap import dedent
@@ -45,6 +49,11 @@ default_args = {
 }
 
 # Create the default OpenMetadata Airflow Connection (if it does not exist)
+"""
+检查 OpenMetadata Airflow 连接
+通过 Airflow 的 REST API 获取 OpenMetadata 的 Airflow 连接 openmetadata_conn_id。
+如果连接不存在 (404)，则通过 POST 请求创建一个连接。
+"""
 res = requests.get(
     AIRFLOW_HOST_API_ROOT + f"connections/{DEFAULT_OM_AIRFLOW_CONNECTION}",
     headers=DEFAULT_AIRFLOW_HEADERS,
